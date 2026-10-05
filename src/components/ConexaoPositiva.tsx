@@ -139,17 +139,6 @@ export function ConexaoPositiva() {
             </p>
           )}
         </div>
-
-        {done && (
-          <a
-            href="https://forms.gle/QbXmLvEZhdFhTovy8"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-2 w-full max-w-xs block text-center bg-white text-[#1A1A1A] font-extrabold text-base sm:text-lg px-8 py-4 rounded-full uppercase tracking-wide shadow-xl hover:bg-yellow-50 hover:scale-105 transition-all duration-200 active:scale-95 animate-pop cursor-pointer border-2 border-[#F7C948]"
-          >
-            💛 Deixe um elogio para alguém
-          </a>
-        )}
       </div>
 
       {toast && (
