@@ -79,10 +79,13 @@ export function ConexaoPositiva() {
         <span className="mb-4 rounded-full bg-secondary px-3 py-1 text-xs font-bold uppercase tracking-widest text-secondary-foreground">
           ✦ uma ação de reconhecimento ✦
         </span>
-        <h1 className="font-display text-4xl font-bold leading-none tracking-tight text-foreground sm:text-5xl">
-          CONEXÃO <span className="text-primary">POSITIVA</span>
+        <h1 className="font-display text-5xl font-bold leading-[0.95] tracking-tight text-foreground drop-shadow-[0_4px_0_oklch(0.85_0.08_60)] sm:text-6xl md:text-7xl">
+          CONEXÃO{" "}
+          <span className="block text-primary">
+            POSITIVA
+          </span>
         </h1>
-        <p className="mt-4 text-base text-muted-foreground">
+        <p className="mt-5 text-base text-muted-foreground">
           Raspe e descubra algo que você precisava ler hoje.
         </p>
 
