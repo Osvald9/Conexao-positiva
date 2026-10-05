@@ -168,3 +168,5 @@
 @utility animate-confetti { animation: confetti 1.1s ease-out forwards; }
 @utility animate-wiggle { animation: wiggle 3.5s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .animate-wiggle, .animate-confetti { animation: none; opacity: 0; } }
+@keyframes card-in { 0% { opacity: 0; transform: translateY(16px) rotate(-2deg) scale(.96); } 100% { opacity: 1; transform: none; } }
+@utility animate-card-in { animation: card-in .5s cubic-bezier(.2,.9,.3,1.2) both; }

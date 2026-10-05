@@ -1,6 +1,6 @@
 const COLORS = ["var(--primary)", "var(--accent)", "var(--sun)", "var(--mint)"];
 
-export function Confetti({ burst }: { burst: number }) {
+export function CelebrationEffect({ burst }: { burst: number }) {
   if (!burst) return null;
   return (
     <div key={burst} className="pointer-events-none absolute inset-0 overflow-visible" aria-hidden="true">

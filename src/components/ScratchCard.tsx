@@ -1,3 +1,4 @@
+import { PositiveMessage } from "./PositiveMessage";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 type Props = {
@@ -7,7 +8,7 @@ type Props = {
 };
 
 const THRESHOLD = 0.6;
-const BRUSH = 26;
+const BRUSH = 30;
 
 export function ScratchCard({ message, onComplete, revealSignal }: Props) {
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -202,16 +203,9 @@ export function ScratchCard({ message, onComplete, revealSignal }: Props) {
   return (
     <div
       ref={wrapRef}
-      className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl bg-card shadow-card ring-1 ring-border"
+      className="relative aspect-[4/5] sm:aspect-[4/3] w-full overflow-hidden rounded-3xl bg-card shadow-card ring-1 ring-border"
     >
-      <div className="absolute inset-0 flex items-center justify-center bg-reveal p-6 text-center sm:p-10">
-        <p
-          className={`font-display text-2xl font-semibold leading-snug text-foreground sm:text-3xl ${cleared ? "animate-pop" : ""}`}
-          aria-live="polite"
-        >
-          {cleared ? message : <span aria-hidden="true">{message}</span>}
-        </p>
-      </div>
+      <PositiveMessage message={message} revealed={cleared} />
       <canvas
         ref={canvasRef}
         aria-label="Área da raspadinha. Deslize para raspar."
