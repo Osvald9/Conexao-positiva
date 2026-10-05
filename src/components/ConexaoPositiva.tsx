@@ -3,26 +3,46 @@ import { ScratchCard } from "@/components/ScratchCard";
 import { CelebrationEffect } from "@/components/CelebrationEffect";
 import { elogios } from "@/data/elogios";
 
-const SEEN_KEY = "cp-seen";
+const DECK_KEY = "cp-deck";
+const DECK_POS_KEY = "cp-deck-pos";
 const COUNT_KEY = "cp-count";
 
-function readSeen(): number[] {
-  try {
-    return JSON.parse(sessionStorage.getItem(SEEN_KEY) || "[]");
-  } catch {
-    return [];
+/** Fisher-Yates shuffle — returns a new shuffled copy */
+function shuffleArray<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j]!, a[i]!];
   }
+  return a;
 }
 
-function pickNext(current: number | null): number {
-  let seen = readSeen();
-  let pool = elogios.map((_, i) => i).filter((i) => !seen.includes(i) && i !== current);
-  if (pool.length === 0) {
-    seen = current != null ? [current] : [];
-    pool = elogios.map((_, i) => i).filter((i) => i !== current);
+/** Load or create a shuffled deck for this session */
+function getOrCreateDeck(): number[] {
+  try {
+    const raw = sessionStorage.getItem(DECK_KEY);
+    if (raw) return JSON.parse(raw) as number[];
+  } catch { /* ignore */ }
+  const deck = shuffleArray(elogios.map((_, i) => i));
+  sessionStorage.setItem(DECK_KEY, JSON.stringify(deck));
+  sessionStorage.setItem(DECK_POS_KEY, "0");
+  return deck;
+}
+
+/** Pick the next card from the deck, cycling back with a new shuffle when exhausted */
+function pickNext(): number {
+  let deck = getOrCreateDeck();
+  let pos = Number(sessionStorage.getItem(DECK_POS_KEY) ?? 0);
+
+  if (pos >= deck.length) {
+    // Reshuffle for the next cycle
+    deck = shuffleArray(elogios.map((_, i) => i));
+    sessionStorage.setItem(DECK_KEY, JSON.stringify(deck));
+    pos = 0;
   }
-  const next = pool[Math.floor(Math.random() * pool.length)] ?? 0;
-  sessionStorage.setItem(SEEN_KEY, JSON.stringify([...seen, next]));
+
+  const next = deck[pos] ?? 0;
+  sessionStorage.setItem(DECK_POS_KEY, String(pos + 1));
   return next;
 }
 
@@ -36,7 +56,7 @@ export function ConexaoPositiva() {
   const [toast, setToast] = useState("");
 
   useEffect(() => {
-    setIdx(pickNext(null));
+    setIdx(pickNext());
     setCount(Number(sessionStorage.getItem(COUNT_KEY) || 0));
   }, []);
 
@@ -52,7 +72,7 @@ export function ConexaoPositiva() {
   }, []);
 
   const next = () => {
-    setIdx((i) => pickNext(i));
+    setIdx(pickNext());
     setDone(false);
     setReveal(0);
     setRound((r) => r + 1);
