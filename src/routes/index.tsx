@@ -32,7 +32,7 @@ function Index() {
   const [burst, setBurst] = useState(0);
   const [reveal, setReveal] = useState(0);
   const [toast, setToast] = useState("");
-  const message = elogios[idx];
+  const message = elogios[idx] ?? elogios[0]!;
 
   // randomize after hydration
   useState(() => {

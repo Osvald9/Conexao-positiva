@@ -110,7 +110,7 @@ export function ScratchCard({ message, onComplete, revealSignal }: Props) {
     for (let y = 0; y < height; y += step) {
       for (let x = 0; x < width; x += step) {
         total++;
-        if (data[(y * width + x) * 4 + 3] < 30) clear++;
+        if ((data[(y * width + x) * 4 + 3] ?? 0) < 30) clear++;
       }
     }
     if (clear / total >= THRESHOLD) finish();
@@ -149,7 +149,7 @@ export function ScratchCard({ message, onComplete, revealSignal }: Props) {
         vx: (Math.random() - 0.5) * 3,
         vy: -Math.random() * 2,
         life: 1,
-        c: cols[(Math.random() * 3) | 0],
+        c: cols[(Math.random() * 3) | 0] ?? "#ddd",
       });
     if (particles.current.length > 120) particles.current.splice(0, 40);
     if (!raf.current) raf.current = requestAnimationFrame(animateFx);
