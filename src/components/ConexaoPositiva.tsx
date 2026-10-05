@@ -79,7 +79,7 @@ export function ConexaoPositiva() {
         <span className="mb-4 rounded-full bg-secondary px-3 py-1 text-xs font-bold uppercase tracking-widest text-secondary-foreground">
           ✦ uma ação de reconhecimento ✦
         </span>
-        <h1 className="font-display text-5xl font-bold leading-[0.95] tracking-tight text-foreground drop-shadow-[0_4px_0_oklch(0.85_0.08_60)] sm:text-6xl md:text-7xl">
+        <h1 className="title-accent font-display text-5xl font-bold leading-[0.95] tracking-tight text-foreground sm:text-6xl md:text-7xl">
           CONEXÃO{" "}
           <span className="block text-primary">
             POSITIVA
