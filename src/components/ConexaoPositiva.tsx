@@ -93,7 +93,7 @@ export function ConexaoPositiva() {
           />
 
           {/* Heading instruction */}
-          <h1 className="text-black font-extrabold text-[15px] sm:text-[17px] md:text-[18px] leading-[1.25] tracking-wide text-center uppercase max-w-[88%] font-sans pt-2 sm:pt-4">
+          <h1 className="text-black font-extrabold text-[15px] sm:text-[17px] md:text-[18px] leading-[1.25] tracking-wide text-center uppercase max-w-[88%] font-sans mt-[80px] pt-0">
             RASPE E DESCUBRA ALGO QUE VOCÊ PRECISAVA LER HOJE.
           </h1>
 
@@ -109,8 +109,8 @@ export function ConexaoPositiva() {
         </div>
       </div>
 
-      {/* Control action buttons & footer below board */}
-      <div className="relative z-20 mt-3 sm:mt-5 flex flex-col items-center gap-2.5 text-center">
+      {/* Control action buttons & footer right under the board */}
+      <div className="relative z-20 -mt-5 sm:-mt-8 flex flex-col items-center gap-2 text-center">
         <div className="flex flex-wrap items-center justify-center gap-3">
           {done ? (
             <>
