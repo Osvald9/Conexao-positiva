@@ -74,59 +74,82 @@ export function ConexaoPositiva() {
   };
 
   return (
-    <main className="min-h-screen bg-page px-5 py-10 sm:py-16">
-      <div className="mx-auto flex max-w-md flex-col items-center text-center">
-        <span className="mb-4 rounded-full bg-secondary px-3 py-1 text-xs font-bold uppercase tracking-widest text-secondary-foreground">
-          ✦ uma ação de reconhecimento ✦
-        </span>
-        <h1 className="title-accent font-display text-5xl font-bold leading-[0.95] tracking-tight text-foreground sm:text-6xl md:text-7xl">
-          CONEXÃO{" "}
-          <span className="block text-primary">
-            POSITIVA
-          </span>
-        </h1>
-        <p className="mt-5 text-base text-muted-foreground">
-          Raspe e descubra algo que você precisava ler hoje.
-        </p>
+    <main
+      className="min-h-screen w-full relative flex flex-col items-center justify-center p-3 sm:p-6 overflow-x-hidden bg-cover bg-center bg-no-repeat select-none"
+      style={{ backgroundImage: "url('/assets/bg.png')" }}
+    >
+      {/* Centered board container */}
+      <div className="relative w-full max-w-[420px] aspect-[924/1423] my-auto flex flex-col items-center">
+        {/* Quadro frame board */}
+        <div
+          className="relative z-10 w-full h-full bg-contain bg-center bg-no-repeat flex flex-col items-center justify-between pt-[22%] pb-[7%] px-[8%]"
+          style={{ backgroundImage: "url('/assets/quadro.png')" }}
+        >
+          {/* Overlapping top logo */}
+          <img
+            src="/assets/logo.png"
+            alt="Conexão Positiva"
+            className="absolute -top-[11%] left-1/2 -translate-x-1/2 w-[86%] max-w-[340px] drop-shadow-md z-20 pointer-events-none"
+          />
 
-        <div className="relative mt-8 w-full">
-          {idx !== null && (
-            <div key={round} className="animate-card-in">
-              <ScratchCard message={message} onComplete={onComplete} revealSignal={reveal} />
-            </div>
-          )}
-          <CelebrationEffect burst={burst} />
+          {/* Heading instruction */}
+          <h1 className="text-black font-extrabold text-[15px] sm:text-[17px] md:text-[18px] leading-[1.25] tracking-wide text-center uppercase max-w-[88%] font-sans pt-2 sm:pt-4">
+            RASPE E DESCUBRA ALGO QUE VOCÊ PRECISAVA LER HOJE.
+          </h1>
+
+          {/* Scratch card area */}
+          <div className="relative w-full aspect-[834/658] my-auto">
+            {idx !== null && (
+              <div key={round} className="w-full h-full animate-card-in">
+                <ScratchCard message={message} onComplete={onComplete} revealSignal={reveal} />
+              </div>
+            )}
+            <CelebrationEffect burst={burst} />
+          </div>
         </div>
+      </div>
 
-        <div className="mt-6 flex min-h-12 flex-wrap items-center justify-center gap-3">
+      {/* Control action buttons & footer below board */}
+      <div className="relative z-20 mt-3 sm:mt-5 flex flex-col items-center gap-2.5 text-center">
+        <div className="flex flex-wrap items-center justify-center gap-3">
           {done ? (
             <>
-              <button onClick={next} className="btn-primary animate-pop">
+              <button
+                onClick={next}
+                className="bg-[#F7C948] hover:bg-[#F5BF26] text-[#1A1A1A] font-extrabold text-sm sm:text-base px-6 py-3 rounded-full uppercase tracking-wider shadow-lg transition-transform active:scale-95 animate-pop cursor-pointer"
+              >
                 RASPAR OUTRO
               </button>
-              <button onClick={share} className="btn-ghost animate-pop">
+              <button
+                onClick={share}
+                className="bg-white/20 hover:bg-white/30 backdrop-blur-md text-white font-bold text-sm sm:text-base px-5 py-3 rounded-full border border-white/40 shadow-lg transition-transform active:scale-95 animate-pop cursor-pointer"
+              >
                 Compartilhar mensagem
               </button>
             </>
           ) : (
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-white/90 font-medium text-shadow drop-shadow">
               Não consegue raspar?{" "}
-              <button onClick={() => setReveal((r) => r + 1)} className="btn-link">
+              <button
+                onClick={() => setReveal((r) => r + 1)}
+                className="text-yellow-300 hover:text-yellow-200 font-bold underline underline-offset-4 cursor-pointer"
+              >
                 Revelar mensagem
               </button>
             </p>
           )}
         </div>
-
-        <p className="mt-8 text-sm text-muted-foreground" aria-live="polite">
-          Você já revelou {count} {count === 1 ? "conexão positiva" : "conexões positivas"} 💛
-        </p>
       </div>
+
       {toast && (
-        <div role="status" className="fixed bottom-6 left-1/2 -translate-x-1/2 rounded-full bg-foreground px-4 py-2 text-sm font-semibold text-background shadow-card animate-pop">
+        <div
+          role="status"
+          className="fixed bottom-6 left-1/2 -translate-x-1/2 rounded-full bg-black/85 backdrop-blur-md px-5 py-2.5 text-sm font-bold text-white shadow-2xl animate-pop z-50"
+        >
           {toast}
         </div>
       )}
     </main>
   );
 }
+

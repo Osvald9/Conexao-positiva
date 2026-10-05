@@ -7,8 +7,8 @@ type Props = {
   revealSignal: number;
 };
 
-const THRESHOLD = 0.6;
-const BRUSH = 30;
+const THRESHOLD = 0.55;
+const BRUSH = 28;
 
 export function ScratchCard({ message, onComplete, revealSignal }: Props) {
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -22,6 +22,17 @@ export function ScratchCard({ message, onComplete, revealSignal }: Props) {
   const raf = useRef(0);
   const [cleared, setCleared] = useState(false);
   const [started, setStarted] = useState(false);
+  const imgRef = useRef<HTMLImageElement | null>(null);
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = "/assets/raspadinha.png";
+    img.onload = () => {
+      imgRef.current = img;
+      if (!done.current) paintCover();
+    };
+    imgRef.current = img;
+  }, []);
 
   const paintCover = useCallback(() => {
     const canvas = canvasRef.current;
@@ -40,44 +51,30 @@ export function ScratchCard({ message, onComplete, revealSignal }: Props) {
     }
     const ctx = canvas.getContext("2d")!;
     ctx.globalCompositeOperation = "source-over";
-    const css = getComputedStyle(document.documentElement);
-    const g = ctx.createLinearGradient(0, 0, w, h);
-    g.addColorStop(0, css.getPropertyValue("--foil-1").trim());
-    g.addColorStop(0.45, css.getPropertyValue("--foil-2").trim());
-    g.addColorStop(0.55, css.getPropertyValue("--foil-3").trim());
-    g.addColorStop(1, css.getPropertyValue("--foil-1").trim());
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, w, h);
-    // grain
-    for (let i = 0; i < (w * h) / 18; i++) {
-      ctx.fillStyle = Math.random() > 0.5 ? "rgba(255,255,255,0.18)" : "rgba(0,0,0,0.07)";
-      ctx.fillRect(Math.random() * w, Math.random() * h, 1, 1);
+
+    if (imgRef.current && imgRef.current.complete && imgRef.current.naturalWidth > 0) {
+      ctx.drawImage(imgRef.current, 0, 0, w, h);
+    } else {
+      // Fallback gold foil gradient until image is ready
+      const g = ctx.createLinearGradient(0, 0, w, h);
+      g.addColorStop(0, "#D79219");
+      g.addColorStop(0.5, "#FBE385");
+      g.addColorStop(1, "#B7750D");
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = "#5C3A00";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.font = `700 ${Math.max(20, Math.min(32, w / 10))}px Nunito, sans-serif`;
+      ctx.fillText("RASPE AQUI", w / 2, h / 2);
     }
-    // sparkle dots pattern
-    ctx.fillStyle = "rgba(255,255,255,0.35)";
-    for (let y = 14; y < h; y += 28)
-      for (let x = (y / 28) % 2 ? 14 : 28; x < w; x += 28) {
-        ctx.beginPath();
-        ctx.arc(x, y, 1.4, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    ctx.fillStyle = css.getPropertyValue("--foil-ink").trim();
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.font = `700 ${Math.max(22, Math.min(34, w / 11))}px Fredoka, sans-serif`;
-    ctx.fillText("RASPE AQUI ✨", w / 2, h / 2);
-    ctx.font = `600 13px Nunito, sans-serif`;
-    ctx.globalAlpha = 0.7;
-    ctx.fillText("deslize o dedo ou o mouse", w / 2, h / 2 + 30);
-    ctx.globalAlpha = 1;
   }, []);
 
   useEffect(() => {
     done.current = false;
     setCleared(false);
     setStarted(false);
-    if (document.fonts?.ready) document.fonts.ready.then(paintCover);
-    else paintCover();
+    paintCover();
   }, [message, paintCover]);
 
   useEffect(() => {
@@ -105,7 +102,7 @@ export function ScratchCard({ message, onComplete, revealSignal }: Props) {
     const ctx = canvas.getContext("2d")!;
     const { width, height } = canvas;
     const data = ctx.getImageData(0, 0, width, height).data;
-    const step = 8; // sample every 8th pixel horizontally & vertically
+    const step = 8;
     let total = 0;
     let clear = 0;
     for (let y = 0; y < height; y += step) {
@@ -135,7 +132,7 @@ export function ScratchCard({ message, onComplete, revealSignal }: Props) {
       p.life -= 0.04;
       ctx.globalAlpha = Math.max(0, p.life);
       ctx.fillStyle = p.c;
-      ctx.fillRect(p.x, p.y, 2.5, 2.5);
+      ctx.fillRect(p.x, p.y, 3, 3);
     }
     ctx.globalAlpha = 1;
     if (particles.current.length) raf.current = requestAnimationFrame(animateFx);
@@ -143,14 +140,15 @@ export function ScratchCard({ message, onComplete, revealSignal }: Props) {
   };
 
   const spawn = (x: number, y: number) => {
-    const cols = ["#d9d9de", "#bfc0c7", "#f2f2f5"];
-    for (let i = 0; i < 2; i++)
+    const cols = ["#FAD961", "#F7C948", "#FFF", "#D79219"];
+    for (let i = 0; i < 3; i++)
       particles.current.push({
-        x, y,
-        vx: (Math.random() - 0.5) * 3,
-        vy: -Math.random() * 2,
+        x,
+        y,
+        vx: (Math.random() - 0.5) * 4,
+        vy: -Math.random() * 2.5,
         life: 1,
-        c: cols[(Math.random() * 3) | 0] ?? "#ddd",
+        c: cols[(Math.random() * cols.length) | 0] ?? "#F7C948",
       });
     if (particles.current.length > 120) particles.current.splice(0, 40);
     if (!raf.current) raf.current = requestAnimationFrame(animateFx);
@@ -203,14 +201,16 @@ export function ScratchCard({ message, onComplete, revealSignal }: Props) {
   return (
     <div
       ref={wrapRef}
-      className="relative aspect-[4/5] sm:aspect-[4/3] w-full overflow-hidden rounded-3xl bg-card shadow-card ring-1 ring-border"
+      className="relative aspect-[834/658] w-full overflow-hidden rounded-[22px] sm:rounded-[26px] shadow-inner bg-[#FDF8EA]"
     >
       <PositiveMessage message={message} revealed={cleared} />
       <canvas
         ref={canvasRef}
         aria-label="Área da raspadinha. Deslize para raspar."
         role="img"
-        className={`absolute inset-0 cursor-grab touch-none select-none transition-opacity duration-700 ${cleared ? "pointer-events-none opacity-0" : "opacity-100"} ${started ? "" : "animate-wiggle"}`}
+        className={`absolute inset-0 cursor-grab touch-none select-none transition-opacity duration-700 ${
+          cleared ? "pointer-events-none opacity-0" : "opacity-100"
+        } ${started ? "" : "animate-wiggle"}`}
         onPointerDown={onDown}
         onPointerMove={onMove}
         onPointerUp={onUp}
@@ -221,3 +221,4 @@ export function ScratchCard({ message, onComplete, revealSignal }: Props) {
     </div>
   );
 }
+

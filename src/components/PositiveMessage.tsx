@@ -1,14 +1,21 @@
 export function PositiveMessage({ message, revealed }: { message: string; revealed: boolean }) {
-  const size = message.length > 110 ? "text-lg sm:text-2xl" : message.length > 70 ? "text-xl sm:text-2xl" : "text-2xl sm:text-3xl";
+  const size =
+    message.length > 110
+      ? "text-xs sm:text-sm md:text-base leading-snug"
+      : message.length > 70
+      ? "text-sm sm:text-base md:text-lg leading-relaxed"
+      : "text-base sm:text-lg md:text-xl leading-relaxed";
+
   return (
-    <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-reveal p-6 text-center sm:p-10">
-      <span className="text-xs font-bold uppercase tracking-[0.2em] text-primary" aria-hidden="true">💛 conexão positiva</span>
+    <div className="absolute inset-0 flex items-center justify-center p-5 sm:p-7 text-center bg-white text-[#1A1A1A] rounded-[22px] sm:rounded-[26px]">
       <p
-        className={`font-display font-semibold leading-snug text-foreground ${size} ${revealed ? "animate-pop" : ""}`}
+        className={`font-sans font-extrabold text-[#1A1A1A] ${size} ${revealed ? "animate-pop" : ""}`}
         aria-live="polite"
       >
-        {revealed ? message : <span aria-hidden="true">{message}</span>}
+        "{revealed ? message : <span aria-hidden="true">{message}</span>}"
       </p>
     </div>
   );
 }
+
+
